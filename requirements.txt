@@ -1,0 +1,6 @@
+streamlit
+pandas
+torch
+llama-index
+sentence-transformers
+langchain-google-genai

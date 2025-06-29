@@ -23,7 +23,7 @@ Construir un sistema de recuperación de información (RAG - Retrieval Augmented
 - FIFA_jugadores
 - FIFA_equipos
 
-### Implementacion desplegadas en la nube con Streamlit y Ngrok
+### Implementacion desplegadas en la nube con Streamlit
 
 - Equipos_Streamlit
 - Jugadores_Streamlit
