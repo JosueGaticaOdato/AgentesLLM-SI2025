@@ -10,15 +10,15 @@ from llama_index.core.storage import StorageContext
 os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 # os.environ["GOOGLE_API_KEY"] = "" #PONER API KEY DE GOOGLE
 
-# # Cargar los jugadores
-# df = pd.read_csv("jugadores_filtrados.csv")
-# #df = pd.read_csv("jugadores_RealMadrid.csv")
+# Cargar los jugadores
+df = pd.read_csv("jugadores_filtrados.csv")
+#df = pd.read_csv("jugadores_RealMadrid.csv")
 
-# # Convertir cada fila a un documento de texto para indexar
-# documents = []
-# for _, row in df.iterrows():
-#     text = "\n".join([f"{col}: {row[col]}" for col in df.columns])
-#     documents.append(Document(text=text))
+# Convertir cada fila a un documento de texto para indexar
+documents = []
+for _, row in df.iterrows():
+    text = "\n".join([f"{col}: {row[col]}" for col in df.columns])
+    documents.append(Document(text=text))
 
 # Usar embeddings con GPU si hay disponible
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -34,9 +34,9 @@ llm = ChatGoogleGenerativeAI(model="gemini-2.0-flash", temperature=0)
 Settings.llm = llm
 Settings.embed_model = embed_model
 
-# # Creando indice
-# index = VectorStoreIndex.from_documents(documents)
-# query_engine = index.as_query_engine(similarity_top_k=3)
+# Creando indice
+index = VectorStoreIndex.from_documents(documents)
+query_engine = index.as_query_engine(similarity_top_k=3)
 
 # # Guardar el indice
 # from google.colab import drive
@@ -45,16 +45,16 @@ Settings.embed_model = embed_model
 # index.storage_context.persist(persist_dir=persist_dir)
 
 #Cargar carpeta con indices para que tarde menos
-@st.cache_resource
-def cargar_query_engine():
-    # Cargar el storage context desde el directorio
-    storage_context = StorageContext.from_defaults(persist_dir="indice_equipos")
-    # Cargar el indice desde el contexto
-    index = load_index_from_storage(storage_context)
-    # Crear el query engine
-    return index.as_query_engine(similarity_top_k=3)
+# @st.cache_resource
+# def cargar_query_engine():
+#     # Cargar el storage context desde el directorio
+#     storage_context = StorageContext.from_defaults(persist_dir="indice_equipos")
+#     # Cargar el indice desde el contexto
+#     index = load_index_from_storage(storage_context)
+#     # Crear el query engine
+#     return index.as_query_engine(similarity_top_k=3)
 
-query_engine = cargar_query_engine()
+# query_engine = cargar_query_engine()
 
 # Interfaz de usuario
 st.set_page_config(

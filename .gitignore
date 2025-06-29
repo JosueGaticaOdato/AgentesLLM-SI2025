@@ -1,1 +1,3 @@
 .streamlit/secrets.toml
+indice_equipos/*
+indice_jugadores/*
