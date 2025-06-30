@@ -6,19 +6,21 @@ import torch
 import streamlit as st
 from llama_index.core import load_index_from_storage, VectorStoreIndex, Document, Settings
 from llama_index.core.storage import StorageContext
-
+import zipfile
+import gdown
+os.environ["HUGGINGFACEHUB_API_TOKEN"] = st.secrets["HUGGINGFACEHUB_API_TOKEN"]
 os.environ["GOOGLE_API_KEY"] = st.secrets["GOOGLE_API_KEY"]
 # os.environ["GOOGLE_API_KEY"] = "" #PONER API KEY DE GOOGLE
 
 # Cargar los jugadores
-df = pd.read_csv("jugadores_filtrados.csv")
-#df = pd.read_csv("jugadores_RealMadrid.csv")
+# df = pd.read_csv("jugadores_filtrados.csv")
+# df = pd.read_csv("jugadores_RealMadrid.csv")
 
 # Convertir cada fila a un documento de texto para indexar
-documents = []
-for _, row in df.iterrows():
-    text = "\n".join([f"{col}: {row[col]}" for col in df.columns])
-    documents.append(Document(text=text))
+#documents = []
+#for _, row in df.iterrows():
+#    text = "\n".join([f"{col}: {row[col]}" for col in df.columns])
+#    documents.append(Document(text=text))
 
 # Usar embeddings con GPU si hay disponible
 device = "cuda" if torch.cuda.is_available() else "cpu"
@@ -35,8 +37,8 @@ Settings.llm = llm
 Settings.embed_model = embed_model
 
 # Creando indice
-index = VectorStoreIndex.from_documents(documents)
-query_engine = index.as_query_engine(similarity_top_k=3)
+#index = VectorStoreIndex.from_documents(documents)
+#query_engine = index.as_query_engine(similarity_top_k=3)
 
 # # Guardar el indice
 # from google.colab import drive
@@ -44,17 +46,30 @@ query_engine = index.as_query_engine(similarity_top_k=3)
 # persist_dir = "/content/drive/MyDrive/indice_jugadores"
 # index.storage_context.persist(persist_dir=persist_dir)
 
-#Cargar carpeta con indices para que tarde menos
-# @st.cache_resource
-# def cargar_query_engine():
-#     # Cargar el storage context desde el directorio
-#     storage_context = StorageContext.from_defaults(persist_dir="indice_jugadores")
-#     # Cargar el indice desde el contexto
-#     index = load_index_from_storage(storage_context)
-#     # Crear el query engine
-#     return index.as_query_engine(similarity_top_k=3)
+file_id = "1GHdyMXzoRHeIT4AwCREHkIwXZHwkybOg"  # file id
+zip_filename = "indice_jugadores.zip"
 
-# query_engine = cargar_query_engine()
+if not os.path.exists("indice_jugadores"):
+    # Descargar desde Google Drive
+    url = f"https://drive.google.com/uc?id={file_id}"
+    output = gdown.download(url, zip_filename, quiet=False)
+
+    # Descomprimir
+    with zipfile.ZipFile(zip_filename, "r") as zip_ref:
+        os.makedirs("indice_jugadores", exist_ok=True)
+        zip_ref.extractall("indice_jugadores")
+
+#Cargar carpeta con indices para que tarde menos
+@st.cache_resource
+def cargar_query_engine():
+    # Cargar el storage context desde el directorio
+    storage_context = StorageContext.from_defaults(persist_dir="indice_jugadores")
+    # Cargar el indice desde el contexto
+    index = load_index_from_storage(storage_context)
+    # Crear el query engine
+    return index.as_query_engine(similarity_top_k=3)
+
+query_engine = cargar_query_engine()
 
 # Interfaz de usuario
 st.set_page_config(

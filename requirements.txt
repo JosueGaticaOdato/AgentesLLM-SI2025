@@ -2,5 +2,13 @@ streamlit
 pandas
 torch
 llama-index
+llama-index-embeddings-huggingface
+llama-index-llms-langchain
 sentence-transformers
+transformers
+huggingface-hub
+langchain
 langchain-google-genai
+langchain-community
+google-generativeai
+gdown
