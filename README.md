@@ -27,3 +27,11 @@ Construir un sistema de recuperación de información (RAG - Retrieval Augmented
 
 - Equipos_Streamlit
 - Jugadores_Streamlit
+
+
+
+- Consultas sobre **Equipos**:  
+  [https://equipos-agentesllm-2025.streamlit.app/](https://equipos-agentesllm-2025.streamlit.app/)
+
+- Consultas sobre **Jugadores**:  
+  [https://jugadores-agentesllm-2025.streamlit.app/](https://jugadores-agentesllm-2025.streamlit.app/)
