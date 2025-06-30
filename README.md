@@ -25,11 +25,6 @@ Construir un sistema de recuperación de información (RAG - Retrieval Augmented
 
 ### Implementacion desplegadas en la nube con Streamlit
 
-- Equipos_Streamlit
-- Jugadores_Streamlit
-
-
-
 - Consultas sobre **Equipos**:  
   [https://equipos-agentesllm-2025.streamlit.app/](https://equipos-agentesllm-2025.streamlit.app/)
 
